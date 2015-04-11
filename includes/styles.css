@@ -1,0 +1,67 @@
+body {
+  background: #000000;
+  font: 12px/20px Verdana, Helvetica;
+  color: #ffffff;
+  margin: 0px;
+  padding: 0px;
+}
+
+h1 {
+  font-family: Arial, Helvetica;
+  padding: 10px;
+  color:#666666;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+label {
+	display:block;
+}
+
+#canvas {
+  border: 1px #cccccc solid;
+  width: 400px;
+  height: 800px;
+  position: relative;
+  overflow: hidden;
+}
+
+#environment {
+  position: absolute;
+  width: 2000px;
+  height: 2000px;
+  background: url(../images/aerial.jpg);
+}
+
+#avatar {
+  width:  20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: url(../images/marine_static.png);
+}
+
+.animateAvatar {
+  background: url(../images/marine.gif) !important;
+}
+
+.gridsquare {
+	width: 20px;
+	height: 20px;
+	float: left;
+	opacity: 0.5;
+	border: 1px #000000 solid;
+}
+
+.terrain-grass {
+	background: #000066;
+}
+
+.terrain-wall {
+	background: #999999;
+}
+
+.terrain-tree {
+	background: #00CC66 url(../images/tree.gif);
+}

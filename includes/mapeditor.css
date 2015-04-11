@@ -1,0 +1,53 @@
+body {
+	margin:0px;
+}
+
+#canvas {
+	width: 100%;
+	height: 100%;
+	overflow: scroll;
+}
+
+.editorsquare {
+	width: 20px;
+	height: 20px;
+	float: left;
+}
+
+.editorsquare:hover {
+	background: #99ffff;
+}
+
+#editor {
+	width:2000px;
+	height:2000px;
+}
+
+#editor-options, #editor-output {
+	position: absolute;
+	top: 60px;
+	border: 1px #000000 solid;
+	background: #ffffff;
+	color: #000000;
+	padding: 10px;
+}
+
+#editor-options {
+	left: 60px;
+}
+
+#editor-output {
+	right: 60px;
+}
+
+.terrain-option {
+	float: left;
+	width: 20px;
+	height: 20px;
+	border: 1px #000000 solid;
+	margin: 5px;
+}
+
+button {
+	float: left;
+}
