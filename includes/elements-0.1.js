@@ -99,16 +99,19 @@ ac.environment.prototype = {
  * TODO:
  * Add customization draw options.
  */
-ac.avatar = function () {
+ac.avatar = function (avatarType) {
   this.speed = 60;
   this.jumpHeight = 100;
   
-  this.init();
+  if (!avatarType) 
+    avatarType = "player";
+
+  this.init(avatarType);  // Types to be supported... only options now are player/mob.
 }
 
 ac.avatar.prototype = {
-  init: function() {
-    $("#canvas").append("<div id=\"avatar\"></div>");
+  init: function(avatarType) {
+    $("#canvas").append("<div class=\"avatar " + avatarType + "\"></div>");
     
     this.reset();
     
@@ -118,15 +121,15 @@ ac.avatar.prototype = {
   },
   
   clearAnimation: function () {
-    $("#avatar").removeClass("animateAvatar");
+    $(".avatar").removeClass("animateAvatar");
     return;
   },
 
   left: function() {
-    var pos = $("#avatar").position();
+    var pos = $(".avatar").position();
     var lt = pos.left;
     
-    $("#avatar").tween({
+    $(".avatar").tween({
       left: {
         start: lt,
         stop: (lt - this.speed),
@@ -141,10 +144,10 @@ ac.avatar.prototype = {
   },
 
   right: function() {
-    var pos = $("#avatar").position();
+    var pos = $(".avatar").position();
     var lt = pos.left;
     
-    $("#avatar").tween({
+    $(".avatar").tween({
       left: {
         start: lt,
         stop: (lt + this.speed),
@@ -159,7 +162,7 @@ ac.avatar.prototype = {
   },
   
   move: function(cmd) {
-    $("#avatar").addClass("animateAvatar");
+    $(".avatar").addClass("animateAvatar");
 
     cmd.call(this);
     
@@ -167,11 +170,11 @@ ac.avatar.prototype = {
   },
   
   jumpUp: function() {
-    var pos = $("#avatar").position();
+    var pos = $(".avatar").position();
     var top = pos.top;
     var that = this;
     
-    $("#avatar").tween({
+    $(".avatar").tween({
       top: {
         start: top,
         stop: (top - this.jumpHeight),
@@ -192,10 +195,10 @@ ac.avatar.prototype = {
   },
 
   jumpDown: function() {
-    var pos = $("#avatar").position();
+    var pos = $(".avatar").position();
     var top = pos.top;
     
-    $("#avatar").tween({
+    $(".avatar").tween({
       top: {
         start: top,
         stop: ($("#canvas").height() - 20),
@@ -249,7 +252,7 @@ ac.move.left = function(el, spd) {
   $(el).css('left', '-=5');
   
 /*  
-  $("#avatar").tween({
+  $(".avatar").tween({
     left: {
       start: lt,
       stop: (lt - this.speed),
@@ -277,6 +280,14 @@ ac.util = {
       left: l,
       top: t
     }
+  },
+  roll: function(max) {
+    if (!max)
+      max = 10;
+
+    return Math.floor((Math.random() * max) + 1); 
+
   }
+
 }
 

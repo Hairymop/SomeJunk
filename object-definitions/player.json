@@ -1,0 +1,11 @@
+{
+	"name": "Joe Smith",
+	"hitpoints": 100,
+	"armor": 10,
+	"weapon": {
+  		"damage": 10,
+  		"critical-chance": 0.05, 
+  		"range": 3,
+  		"rate-of-fire": 1         // Per turn value.
+	}
+}
