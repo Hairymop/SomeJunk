@@ -4,13 +4,13 @@
     <link rel="stylesheet" href="includes/styles.css" type="text/css" />
     <script src="includes/jquery-1.9.1.js" type="text/javascript"></script>
     <script src="includes/jstween-1.2/jstween-1.2.js" type="text/javascript"></script>
-    <script src="includes/elements-0.1.js" type="text/javascript"></script>
+    <script src="includes/elements-0.2.js" type="text/javascript"></script>
     <script src="includes/pathfinding-browser.min.js" type="text/javascript"></script>
     <script src="includes/combat.js" type="text/javascript"></script>
     <script type="text/javascript">
 
       var player, mob, environment;
-
+      // TODO: wrap the avatars in container.
       // Use this for basic player data design.
       var player = {
         "hitpoints": 100,
@@ -32,17 +32,37 @@
     <style type="text/css">
       .avatar {
         left: 40%;
+        border: 1px #ffffff solid;
+      }
+      .hitmarker, .status {
+        border: 1px #00ff00 solid;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 40%;
+        top: 45%;
+        color: #ffffff;
+        text-align: center;
+      }
+      .status {
+        top: 40%;
+        width: 50px;
       }
       .mob {
         left: 60%;
-      }
+        border-color: #ff0000;
+      } 
     </style>
     <title>PixelPunk</title>
   </head> 
    
   <body>
-    <div id="canvas">
+      <div class="avatar player"></div>
+      <div class="hitmarker player">0</div>
+      <div class="status player">ALIVE</div>
 
-    </div>
+      <div class="avatar mob"></div>
+      <div class="hitmarker mob">0</div>
+      <div class="status mob">ALIVE</div>
   </body>
 </html>

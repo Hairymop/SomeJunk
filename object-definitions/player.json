@@ -3,6 +3,7 @@
 	"hitpoints": 100,
 	"armor": 10,
 	"weapon": {
+		"name": "Mac & Jeez Gun",
   		"damage": 10,
   		"critical-chance": 0.05, 
   		"range": 3,
