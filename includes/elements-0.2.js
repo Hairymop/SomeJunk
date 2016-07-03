@@ -6,6 +6,8 @@
  * - Get Grid elements on view of the items. 
  * Move play area not avatar. 
  * Avatar remains centered on the the screen.
+ * UTIL:
+ * Figure out a better way to bind functions.
  * NAVIGATION:
  * - Move "Move" functions into Utils area. Add moveEnvironment and moveAvatar.
  */
@@ -99,19 +101,20 @@ ac.environment.prototype = {
  * TODO:
  * Add customization draw options.
  */
-ac.avatar = function (avatarType) {
-  this.speed = 60;
-  this.jumpHeight = 100;
-  
-  if (!avatarType) 
-    avatarType = "player";
+ac.avatar = function (data) {
 
-  this.init(avatarType);  // Types to be supported... only options now are player/mob.
+  this.data = data;
+  
+  this.init();  // Types to be supported... only options now are player/mob.
 }
 
 ac.avatar.prototype = {
-  init: function(avatarType) {
-    $("#canvas").append("<div class=\"avatar " + avatarType + "\"></div>");
+  init: function() {
+
+    ac.data.player = this;
+    this.id = ac.util.generateId();
+
+    this.draw();
     
     this.reset();
     
@@ -119,15 +122,30 @@ ac.avatar.prototype = {
     
     return true;
   },
+
+  draw: function() {
+
+
+    var html = '<div class="player ' + this.id + '" id="' + this.id + '">'
+        + '<div class="avatar"></div>'
+        + '<div class="status">ALIVE</div>'
+        + '</div>';
+
+    $("#canvas").append(html);
+
+    this.element = document.getElementById(this.id);
+
+    return;
+  },
   
   clearAnimation: function () {
-    $(".avatar").removeClass("animateAvatar");
+    $(".player .avatar").removeClass("animateAvatar");
     return;
   },
 
   
   move: function(cmd) {
-    $(".avatar").addClass("animateAvatar");
+    $(".player .avatar").addClass("animateAvatar");
 
     cmd.call(this);
     
@@ -160,10 +178,50 @@ ac.avatar.prototype = {
   },
   
   reset: function() {
+  },
+
+  attack: function (opponent) {
+    var engage = new ac.engagement(this, opponent);
+
+  },
+
+  hit: function(dmg) {
+    $('#' + this.id + ' > .hitmarker').html(dmg);
+    alert('Hit DMG: ' + dmg);
   }
 
 }
 
+ac.monster = class Monster extends ac.avatar {
+  draw() {
+
+    var html = '<div class="monster" id="' + this.id + '">'
+        + '<div class="avatar"></div>'
+        + '<div class="status">ALIVE</div>'
+        + '</div>';
+
+
+    $("#canvas").append(html);
+
+    this.element = document.getElementById(this.id);
+
+    return;
+  }
+
+  prepare() {
+    var that = this;
+
+    $(this.element).click(function(e) {
+      ac.util.binding(ac.data.player, "attack", that);
+
+    });
+  }
+}
+
+ac.data = {
+  canvas: $("#canvas"),
+  player: {}
+}
 
 ac.util = {
   center: function() {
@@ -179,6 +237,17 @@ ac.util = {
       top: t
     }
   },
+  generateId: function() {
+    var n = Math.random();
+    n = n.toString();
+    n = n.replace(/\./g,'');
+
+    return n;
+  },
+  binding: function(obj, func, args) {
+    obj[func](args);
+    return;
+  },
   roll: function(max) {
     if (!max)
       max = 10;
@@ -188,4 +257,5 @@ ac.util = {
   }
 
 }
+
 

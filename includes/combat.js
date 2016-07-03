@@ -1,39 +1,64 @@
 // Combat
 /**
- * Players & Opponents is an array of players. See object-definitions.
+ * Engagment is an instance of an attack between 2 players/mobs.
  * a = Aggressor
  * d = Defender
  */
 
-ac.engagement = function (player, opponents) {
-  this.init(player, opponents);  // Types to be supported... only options now are player/mob.
+ac.engagement = function (player, opponent) {
+  this.init(player, opponent);  // Types to be supported... only options now are player/mob.
 }
 
 ac.engagement.prototype = {
-  init: function(players, opponents) {
-  	this.players = players;
-  	this.opponents = opponents;
+  init: function(player, opponent) {
+    this.a = player;
+    this.d = opponent;
+
+    this.attack();
+
+    return;
   },
 
-  engage: function () {
-
-  },
-
-  selectOpponent: function() {
-
-  },
-
-  hit: function (a, d) {
+  attack: function () {
+    var msg;
+    var dmg = 0;
     var hit = this.isHit();
 
-    if (!hit)
+    if (!hit) {
+      this.miss();
       return false;
+    }
 
-    var crit = this.isCritical(a, d);
+    dmg = this.damage();
+    msg = dmg;
+
+    var crit = this.isCritical();
+    if (crit) {
+      dmg = dmg * 2;
+      msg = '*' + dmg + '*';
+    }
+
+
+    /**
+     * Call hit on defending player. Triggers animations contained in ac.avatar prototype.
+     */
+    this.hitmarker(msg);
+  //  alert(dmg)
+
+    return;
 
   },
 
-  isHit: function (a, d) {
+  isHit: function () {
+    var r = ac.util.roll();
+
+    if (r > 2)
+      return true;
+    else
+      return false;
+  },
+
+  isCritical: function () {
     var r = ac.util.roll();
 
     if (r > 5)
@@ -42,16 +67,23 @@ ac.engagement.prototype = {
       return false;
   },
 
-  isCritical: function () {
+  hitmarker: function(msg) {
 
+    var html = '<div class="hitmarker">' + msg + '</div>';
+
+    $(this.d.element).append(html);
+
+    return;
   },
 
   damage: function() {
     return 10;
   },
 
-  miss: function () {
+  miss: function (msg) {
+    this.hitmarker('MISS');
 
+    return;
   }
 
 }
