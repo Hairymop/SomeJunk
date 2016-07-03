@@ -65,3 +65,33 @@ label {
 .terrain-tree {
 	background: #00CC66 url(../images/tree.gif);
 }
+
+/**
+ * Combat CSS
+ */
+.hitmarker {
+  transition: opacity 1s;
+  animation: fadeinout 2s linear forwards;
+  color: #ffffff;
+  text-align: center;
+  width: 75px;
+  position: absolute;
+  bottom: 70px;
+}
+
+/**
+ * Animations
+ */
+@keyframes fadeinout {
+  0% { 
+    opacity: 0; 
+    bottom: 60px;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    bottom: 100px;
+  }
+}

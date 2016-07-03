@@ -1,35 +1,89 @@
 // Combat
 /**
- * Opponents is an array of players. See object-definitions.
+ * Engagment is an instance of an attack between 2 players/mobs.
+ * a = Aggressor
+ * d = Defender
  */
 
-ac.engagement = function (player, opponents) {
-  this.init(player, opponents);  // Types to be supported... only options now are player/mob.
+ac.engagement = function (player, opponent) {
+  this.init(player, opponent);  // Types to be supported... only options now are player/mob.
 }
 
 ac.engagement.prototype = {
-  init: function(player1, player2) {
+  init: function(player, opponent) {
+    this.a = player;
+    this.d = opponent;
+
+    this.attack();
+
+    return;
+  },
+
+  attack: function () {
+    var msg;
+    var dmg = 0;
+    var hit = this.isHit();
+
+    if (!hit) {
+      this.miss();
+      return false;
+    }
+
+    dmg = this.damage();
+    msg = dmg;
+
+    var crit = this.isCritical();
+    if (crit) {
+      dmg = dmg * 2;
+      msg = '*' + dmg + '*';
+    }
+
+
+    /**
+     * Call hit on defending player. Triggers animations contained in ac.avatar prototype.
+     */
+    this.hitmarker(msg);
+  //  alert(dmg)
+
+    return;
 
   },
 
-  start: function () {
+  isHit: function () {
+    var r = ac.util.roll();
 
+    if (r > 2)
+      return true;
+    else
+      return false;
   },
 
-  engage: function () {
+  isCritical: function () {
+    var r = ac.util.roll();
 
+    if (r > 5)
+      return true;
+    else
+      return false;
   },
 
-  hit: function () {
+  hitmarker: function(msg) {
 
+    var html = '<div class="hitmarker">' + msg + '</div>';
+
+    $(this.d.element).append(html);
+
+    return;
   },
 
-  critical: function () {
-
+  damage: function() {
+    return 10;
   },
 
-  miss: function () {
+  miss: function (msg) {
+    this.hitmarker('MISS');
 
+    return;
   }
 
 }
