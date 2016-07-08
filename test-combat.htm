@@ -14,22 +14,35 @@
       // Use this for basic player data design.
       
       var player = {
+        "type": "player",
+        "level": 3,
         "hitpoints": 100,
-        "armor": 10,
+        "health": 100,
+        "armor": {
+          "defence": 10,
+          "damage-prevention": 5,
+          "deflection-chance": 5
+        },
         "weapon": {
+          "type": "weapon",
+          "sub-type": "rifle",
+          "name": "Mac & Jeez Gun",
           "damage": 10,
-          "critical-chance": 0.05, 
+          "critical-chance": 50,     // Percentage value.
           "range": 3,
           "rate-of-fire": 1         // Per turn value.
         }
       }
 
       var monster = {
+        "type": "monster",
+        "level": 3,
         "hitpoints": 100,
+        "health": 100,
         "armor": 10,
         "weapon": {
           "damage": 10,
-          "critical-chance": 0.05, 
+          "critical-chance": 5, 
           "range": 3,
           "rate-of-fire": 1         // Per turn value.
         }
@@ -38,7 +51,7 @@
     
       $(document).ready(function() {
         environment = new ac.environment();
-        player = new ac.avatar(player);
+        ac.data.player = new ac.avatar(player);
         monster = new ac.monster(monster);
 
       });
