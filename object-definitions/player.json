@@ -1,13 +1,26 @@
 {
 	"name": "Joe Smith",
+	"type": "player",
+	"level": 3,
 	"hitpoints": 100,
-	"armor": 10,
+	"health": 100,
+	"dexterity": 10,
+	"armor": {
+		"type": "armor",
+		"sub-type":"light",
+		"defence": 10,
+		"damage-prevention": 5,
+		"deflection-chance": 5,
+		"bonus": 2
+	},
 	"weapon": {
+		"type": "weapon",
+		"sub-type": "rifle",
 		"name": "Mac & Jeez Gun",
-  		"damage": 10,
-  		"critical-chance": 0.05, 
-  		"critical-modifier": 2, 
-  		"range": 3,
-  		"rate-of-fire": 1         // Per turn value.
+		"damage": 10,
+		"critical-chance": 50,     // Percentage value.
+		"bonus": 2,
+		"range": 3,
+		"rate-of-fire": 1         // Per turn value.
 	}
 }

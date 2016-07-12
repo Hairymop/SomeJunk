@@ -104,15 +104,13 @@ ac.environment.prototype = {
 ac.avatar = function (data) {
 
   this.data = data;
+  this.id = ac.util.generateId();
   
   this.init();  // Types to be supported... only options now are player/mob.
 }
 
 ac.avatar.prototype = {
   init: function() {
-
-    ac.data.player = this;
-    this.id = ac.util.generateId();
 
     this.draw();
     
@@ -125,15 +123,12 @@ ac.avatar.prototype = {
 
   draw: function() {
 
+    ac.render.drawAvatar(this);
 
-    var html = '<div class="player ' + this.id + '" id="' + this.id + '">'
-        + '<div class="avatar"></div>'
-        + '<div class="status">ALIVE</div>'
-        + '</div>';
+    var health;
+    health = this.getHealth();
 
-    $("#canvas").append(html);
-
-    this.element = document.getElementById(this.id);
+    $(this.elements["health"]).css('width:' + health + 'px');
 
     return;
   },
@@ -151,7 +146,63 @@ ac.avatar.prototype = {
     
     return true;
   },
+
+  getCritical: function () {
+    return this.data.weapon['critical-chance'];
+  },
   
+  getHealth: function() {
+    // TODO: Replace this with an actual calculated value. May need to fluctaute based on potions etc.
+    return this.data.health;
+  },
+
+  getAttackRating: function() {
+    var ar
+    var d = this.data;
+    var w = d.weapon;
+    var bonus = 1;
+
+    // TODO: Add support for item bonus. Probably want to make this function to check if item supports attack bonus.
+    if (w.bonus)
+      bonus = w.bonus;
+
+    ar = (bonus + d.dexterity + d.level);
+
+    return ar;
+  },
+
+  getDefenceRating: function() {
+    var dr
+    var d = this.data;
+    var a = d.armor;
+    var bonus = 1;
+
+    // TODO: Add support for item bonus. Probably want to make this function to check if item supports attack bonus.
+    if (a.bonus)
+      bonus = a.bonus;
+
+    dr = (bonus + d.dexterity + d.level);
+
+    return dr;
+  },
+
+  getDamage: function() {
+    return this.data.weapon.damage;
+  },
+
+  setHealth: function(health) {
+    var health;
+
+    if (health <= 0)
+      health = 0;
+    
+    this.data.health = health;
+
+    $(this.elements["health"]).css('width', health + '%');
+
+    return;
+
+  },
 
   keymap: function (e) {
     console.log("Pressing...");
@@ -182,12 +233,31 @@ ac.avatar.prototype = {
 
   attack: function (opponent) {
     var engage = new ac.engagement(this, opponent);
+    return;
+  },
+
+
+  hit: function(dmg) {
+    var health = this.getHealth();
+    health = (health - dmg);
+
+    this.setHealth(health);
+
+    if (health <= 0) {
+      health = 0;
+      this.destroy();
+    }
+
+    return;
 
   },
 
-  hit: function(dmg) {
-    $('#' + this.id + ' > .hitmarker').html(dmg);
-    alert('Hit DMG: ' + dmg);
+  destroy: function() {
+    $(this.elements["container"]).unbind("click");
+
+    $(this.elements["avatar"]).addClass("death");
+
+//    alert('thus endeth his life');
   }
 
 }
@@ -195,15 +265,7 @@ ac.avatar.prototype = {
 ac.monster = class Monster extends ac.avatar {
   draw() {
 
-    var html = '<div class="monster" id="' + this.id + '">'
-        + '<div class="avatar"></div>'
-        + '<div class="status">ALIVE</div>'
-        + '</div>';
-
-
-    $("#canvas").append(html);
-
-    this.element = document.getElementById(this.id);
+    ac.render.drawAvatar(this);
 
     return;
   }
@@ -211,7 +273,7 @@ ac.monster = class Monster extends ac.avatar {
   prepare() {
     var that = this;
 
-    $(this.element).click(function(e) {
+    $(this.elements["container"]).click(function(e) {
       ac.util.binding(ac.data.player, "attack", that);
 
     });
@@ -221,6 +283,30 @@ ac.monster = class Monster extends ac.avatar {
 ac.data = {
   canvas: $("#canvas"),
   player: {}
+}
+
+ac.render = {
+  // TODO: Refactor to allow for a list of all elements rather than individual references.
+
+  drawAvatar: function(avatar) {
+    var id = avatar.id;
+    avatar.elements = {};
+
+    var html = '<div class="unit ' + avatar.data.type + ' ' + id + '" id="' + id + '">'
+        + '<div class="avatar"></div>'
+        + '</div>';
+
+    $("#canvas").append(html);
+
+    avatar.elements["container"] = document.getElementById(id);
+
+    var el = '<div class="health"></div>';
+    $(avatar.elements["container"]).append(el);
+
+    avatar.elements["avatar"] = $('#' + id + ' > .avatar');
+    avatar.elements["health"] = $('#' + id + ' > .health');
+
+  }
 }
 
 ac.util = {

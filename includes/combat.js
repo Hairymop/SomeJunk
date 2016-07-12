@@ -42,7 +42,10 @@ ac.engagement.prototype = {
     /**
      * Call hit on defending player. Triggers animations contained in ac.avatar prototype.
      */
+    this.d.hit(dmg);
+
     this.hitmarker(msg);
+
   //  alert(dmg)
 
     return;
@@ -50,7 +53,12 @@ ac.engagement.prototype = {
   },
 
   isHit: function () {
-    var r = ac.util.roll();
+    var atk = ac.util.roll(100);
+    var def = ac.util.roll(100);
+    var arat = this.a.getAttackRating();
+    var drat = this.d.getDefenceRating();
+
+//    var toHit = ;
 
     if (r > 2)
       return true;
@@ -59,9 +67,11 @@ ac.engagement.prototype = {
   },
 
   isCritical: function () {
-    var r = ac.util.roll();
+    var r = ac.util.roll(100);
 
-    if (r > 5)
+    var crit = this.a.getCritical();
+
+    if (r < crit)
       return true;
     else
       return false;
@@ -71,7 +81,7 @@ ac.engagement.prototype = {
 
     var html = '<div class="hitmarker">' + msg + '</div>';
 
-    $(this.d.element).append(html);
+    $(this.d.elements["container"]).append(html);
 
     return;
   },
