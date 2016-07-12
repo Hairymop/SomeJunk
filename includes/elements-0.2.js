@@ -156,13 +156,38 @@ ac.avatar.prototype = {
     return this.data.health;
   },
 
-  attackRating: function() {
-    
-    return;
+  getAttackRating: function() {
+    var ar
+    var d = this.data;
+    var w = d.weapon;
+    var bonus = 1;
+
+    // TODO: Add support for item bonus. Probably want to make this function to check if item supports attack bonus.
+    if (w.bonus)
+      bonus = w.bonus;
+
+    ar = (bonus + d.dexterity + d.level);
+
+    return ar;
   },
 
-  defenceRating: function() {
-    return;
+  getDefenceRating: function() {
+    var dr
+    var d = this.data;
+    var a = d.armor;
+    var bonus = 1;
+
+    // TODO: Add support for item bonus. Probably want to make this function to check if item supports attack bonus.
+    if (a.bonus)
+      bonus = a.bonus;
+
+    dr = (bonus + d.dexterity + d.level);
+
+    return dr;
+  },
+
+  getDamage: function() {
+    return this.data.weapon.damage;
   },
 
   setHealth: function(health) {
@@ -208,8 +233,9 @@ ac.avatar.prototype = {
 
   attack: function (opponent) {
     var engage = new ac.engagement(this, opponent);
-
+    return;
   },
+
 
   hit: function(dmg) {
     var health = this.getHealth();

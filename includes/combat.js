@@ -53,9 +53,10 @@ ac.engagement.prototype = {
   },
 
   isHit: function () {
-    var r = ac.util.roll(100);
-    var ar = this.a.attackRating();
-    var dr = this.d.defenceRating();
+    var atk = ac.util.roll(100);
+    var def = ac.util.roll(100);
+    var arat = this.a.getAttackRating();
+    var drat = this.d.getDefenceRating();
 
 //    var toHit = ;
 
