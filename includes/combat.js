@@ -53,14 +53,15 @@ ac.engagement.prototype = {
   },
 
   isHit: function () {
-    var atk = ac.util.roll(100);
-    var def = ac.util.roll(100);
-    var arat = this.a.getAttackRating();
-    var drat = this.d.getDefenceRating();
+    var atk = ac.util.roll(20);
+    var def = ac.util.roll(20);
+    var ar = this.a.getAttackRating();
+    var dr = this.d.getDefenceRating();
 
-//    var toHit = ;
+    ar = (ar + atk);
+    dr = (dr + def);
 
-    if (r > 2)
+    if (ar > dr)
       return true;
     else
       return false;
