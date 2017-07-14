@@ -26,7 +26,8 @@ ac.init = function() {
  * Setup play area and world map.
  *
  */
-ac.environment = function () {
+ac.environment = function (data) {
+  this.data = data;
   this.init();
 }
 
@@ -38,13 +39,42 @@ ac.environment.prototype = {
     this.draw();
   },
   
+  // Draws the map container and calls render based on data. 
   draw: function(){
-    $("#canvas").append("<div id=\"environment\"></div>");
+    $("#canvas").append('<div id="environment"></div>');
     this.elem = $("#environment") 
+    
+    
+    /*
     var that = this;
+
     this.elem.bind("click", function(e) {
       that.move(e)
+    })*/
+
+    var d = this.data;
+    var n = this.data.nodes;
+
+    for (var i=0; i < d.width; i++) {
+      for (var j=0; j < d.height; j++) {
+        // console.log(i + " - " + j);
+        this.render(n[i][j].x, n[i][j].y, n[i][j].blockType);
+      }
+    }
+  },
+
+  // Renders the individual block in the grid
+  render: function(x, y, blockType) {
+    var t = (!blockType) ? "grass" : blockType;
+    var el = $('<div class="gridsquare ' + ac.types[t].class + '">');
+    var b = this.elem.append(el);
+
+    var that = this;
+    el.bind("click", function(e) {
+      that.move(e)
     })
+
+    console.log(el);
   },
   
   move: function(e) {
@@ -58,11 +88,11 @@ ac.environment.prototype = {
     
     var pos = $("#environment").position();
     
-	nl = (c.left - nl);
-	nl = this.startLeft + nl;
+    nl = (c.left - nl);
+    nl = this.startLeft + nl;
 
-	nt = (c.top - nt);
-	nt = this.startTop + nt;
+    nt = (c.top - nt);
+    nt = this.startTop + nt;
 
     $("#environment").tween({
       left: {
@@ -342,6 +372,25 @@ ac.util = {
 
   }
 
+}
+
+// Moved types data into elements JS
+ac.types = {
+  "grass":{
+    name: "Grass",
+    walkable: true,
+    class: "terrain-grass"
+  },
+  "tree":{
+    name: "Tree",
+    walkable: false,
+    class: "terrain-tree"
+  },
+  "wall":{
+    name: "Wall",
+    walkable: false,
+    class: "terrain-wall"
+  }
 }
 
 

@@ -14,24 +14,6 @@ ac.mapdata = [
 	
 ]
 
-ac.types = {
-	"grass":{
-		name: "Grass",
-		walkable: true,
-		class: "terrain-grass"
-	},
-	"tree":{
-		name: "Tree",
-		walkable: false,
-		class: "terrain-tree"
-	},
-	"wall":{
-		name: "Wall",
-		walkable: false,
-		class: "terrain-wall"
-	}
-}
-
 /**
  * Render the initial map and work space.
  */
@@ -42,11 +24,11 @@ ac.mapeditor = function() {
 
 ac.mapeditor.prototype = {
   init: function() {
-	  this.draw();
-	  this.prepare();
-		this.settings = {
-			activetype: "grass"
-		}
+	this.draw();
+	this.prepare();
+	this.settings = {
+	  activetype: "grass"
+	}
   },
   prepare: function() {
 	  this.finder   = new PF.AStarFinder();
@@ -71,6 +53,9 @@ ac.mapeditor.prototype = {
 	  d.className = "editorsquare terrain-grass";
 	  this.parent.append(d);
 	  
+	  if (!item.blockType)
+	  	item.blockType = "grass";
+
 	  var that = this;
 	  $(d).bind("click", function(e) {
         that.set(e, item)
@@ -86,19 +71,20 @@ ac.mapeditor.prototype = {
 	 return path;
   },
 	
-	gettype: function() {
-		var active = ac.map.settings.activetype
-		var type = ac.types[active]
-		type.type = active;
-		return type;
-	},
+  getType: function() {
+  	var active = ac.map.settings.activetype;
+	var bt = ac.types[active];
+	bt.blockType = active;
+
+	return bt;
+  },
 	
   set: function(e, item){
-		var type = this.gettype();
-		item.walkable = type.walkable;
-		item.type = type.type;
+		var bt = this.getType();
+		item.walkable = bt.walkable;
+		item.blockType = bt.blockType;
 		
-		$(e.target).attr('class', 'editorsquare ' + type.class);
+		$(e.target).attr('class', 'editorsquare ' + bt.class);
   }
 
 }
@@ -121,10 +107,10 @@ ac.mapoptions.prototype = {
     var s = $("#terrain-type")
 		
 		var t = ac.types
-		for(var type in ac.types) {
-			s.append('<div id="terrain-' + type + '" class="terrain-option ' + t[type].class + '" title="' + t[type].name + '"></div>');
+		for(var blockType in ac.types) {
+			s.append('<div id="terrain-' + blockType + '" class="terrain-option ' + t[blockType].class + '" title="' + t[blockType].name + '"></div>');
 
-			$('#terrain-' + type).data("value", type).on("click", function(e){
+			$('#terrain-' + blockType).data("value", blockType).on("click", function(e){
 		    ac.map.settings.activetype = $(this).data().value;
 		  });
 		}
